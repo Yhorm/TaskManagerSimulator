@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "constants.h"
-#include "enum.h"
+#include "Constants.h"
+#include "Enum.h"
 #include <vector>
 
 
