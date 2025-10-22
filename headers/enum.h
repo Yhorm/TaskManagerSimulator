@@ -1,8 +1,5 @@
 #pragma once
 
-#define Round-Robin = RR
-
-
 namespace Enum
 {
     enum class TipoEscalonador
