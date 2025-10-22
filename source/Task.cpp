@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "../headers/Task.h"
 
 
@@ -26,22 +25,4 @@ namespace OS
         addEvent(ev);
         ev = nullptr;
     }
-=======
-#include "../headers/Task.h"
-
-
-namespace OS
-{
-    Task::Task(int strt, int dur) :
-        curState(Enum::TaskState::ReadyToExecute),
-        start(strt),
-        duration(dur),
-        lifeTime(0),
-        waitTime(0)
-    {
-        OperationList.clear();
-    }
-    Task::~Task()
-    {}
->>>>>>> e201e87ab9400abed482fdb3c3af659256b200a2
 }
