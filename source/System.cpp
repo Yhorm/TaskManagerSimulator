@@ -5,7 +5,9 @@ namespace OS
 {
     System::System() :
         _tick(),
-        _quantum()
+        _quantum(),
+        _sched(nullptr),
+        fakeTick(0)
     {
         ParseFile();
     }
@@ -99,7 +101,8 @@ namespace OS
         //Escalonador
         std::getline(tokens, stringCfg, Constants::SEPARADOR_STRINGS);
         Enum::TipoEscalonador schedType = StringToScheduler(stringCfg);
-        
+        this->_sched = createScheduler(schedType);
+
         //Quantum
         std::getline(tokens, stringCfg, Constants::SEPARADOR_STRINGS);
         this->_quantum = std::stoi(stringCfg);
@@ -131,8 +134,14 @@ namespace OS
             //pega o ID
             std::getline(tokens, taskId, Constants::SEPARADOR_STRINGS);
             //pega o tempo de inicio e de duração:
-            std::getline(tokens, stringCfg, Constants::SEPARADOR_STRINGS);
-            start = std::stoi(stringCfg);
+            if(std::getline(tokens, stringCfg, Constants::SEPARADOR_STRINGS))
+            {
+                start = std::stoi(stringCfg);
+            }
+            else
+            {
+                start = 0;
+            }
             
             std::getline(tokens, stringCfg, Constants::SEPARADOR_STRINGS);
             dur = std::stoi(stringCfg);
@@ -180,5 +189,38 @@ namespace OS
         }
 
         arquivoCfg.close();
+    }
+
+    Scheduler* System::createScheduler(Enum::TipoEscalonador sched)
+    {
+        Scheduler* newSched = nullptr;
+        PRIOP* priopSched = nullptr;
+        SRTF* SRTFsched = nullptr;
+        FIFO* FIFOsched = nullptr;
+
+        switch(sched)
+        {
+            case(Enum::TipoEscalonador::PRIOp):
+            {
+                priopSched = new PRIOP();
+                newSched = dynamic_cast<Scheduler*>(priopSched);
+            }
+            case(Enum::TipoEscalonador::SRTF):
+            {
+                SRTFsched = new SRTF();
+                newSched = dynamic_cast<Scheduler*>(SRTFsched);
+            }
+            case(Enum::TipoEscalonador::FIFO):
+            {
+                FIFOsched = new FIFO();
+                newSched = dynamic_cast<Scheduler*>(FIFOsched);
+            }
+            default:
+            {
+                FIFOsched = new FIFO();
+                newSched = dynamic_cast<Scheduler*>(FIFOsched);
+            }
+        }
+        return newSched;
     }
 }

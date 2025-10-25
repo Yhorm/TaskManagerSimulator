@@ -6,37 +6,53 @@
 
 #include <iostream>
 #include <vector>
-#include <queue>
 #include <fstream>
 #include <sstream>
+#include <chrono>
+
 
 namespace OS
 {
     class Scheduler 
     {
-        private:
-            std::vector<Task*> _taskBlock;
-            std::vector<Task*> _newTasks;
-            std::vector<Task*> _usingResource;
-            std::vector<Task*> _pausedTasks;
-            static Scheduler* _instance;
+        protected:
+            std::vector<Task*>  newTasks;
+            std::vector<Task*>  taskBlock;
+            std::vector<Task*>  usingResource;
+            std::vector<Task*>  pausedTasks;
+            std::vector<Task*>  finishedTasks;
+            static Scheduler*   instance;
+
+            Task*               curTask;
 
             Scheduler();
         public:
         //Construtora
         //Destrutora
-            Scheduler* getInstance();
-            ~Scheduler();
-        //Criação de tarefas
-            Task* CreateTask(int strt, int dur, int prio, std::string id);
-        //Parser de arquivos &  Funções com relação as configurações
+            Scheduler*      getInstance();
+            virtual         ~Scheduler();
 
-        //Função principal
-            virtual void Schedule();
+        //Criação de tarefas
+            Task*           CreateTask(int strt, int dur, int prio, std::string id);
+
+        //Get e set da tarefa atual
+            Task*           getCurTask() {return curTask; };
+            void            setCurTask(Task* tsk) {curTask = tsk;};
+
+        //Funções principais
+            virtual void    Schedule(std::chrono::milliseconds tick);
+            virtual void    ScheduleFakeTick(int tick);
+            bool            ScheduleFinished();
+            virtual void    run(std::chrono::milliseconds tick);
+            virtual void    runFakeTick(int tick);
+            void            checkNewTasks(std::chrono::milliseconds tick);
+            void            checkNewTasksFakeTick(int tick);
+            void            changeTask(Task* tsk);
         //Funções auxiliares
-           void addTaskToBlock(Task* tsk) { _taskBlock.push_back(tsk);};
-           void addTaskToNew(Task* tsk) { _newTasks.push_back(tsk);};
-           void addTaskToResource(Task* tsk) { _usingResource.push_back(tsk);};
-           void addTaskToPaused(Task* tsk) { _pausedTasks.push_back(tsk);};
+           void             addTaskToBlock(Task* tsk) { taskBlock.push_back(tsk); };
+           void             addTaskToNew(Task* tsk) { newTasks.push_back(tsk);};
+           void             addTaskToResource(Task* tsk) { usingResource.push_back(tsk);};
+           void             addTaskToPaused(Task* tsk) { pausedTasks.push_back(tsk);};
+           void             addTaskToFinished(Task* tsk) { finishedTasks.push_back(tsk); };
     };
 }

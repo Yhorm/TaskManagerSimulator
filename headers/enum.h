@@ -4,7 +4,7 @@ namespace Enum
 {
     enum class TipoEscalonador
     {
-        NONE = 0,
+        FIFO = 0,
         RR = 1,
         SRTF = 2,
         PRIOc = 3,

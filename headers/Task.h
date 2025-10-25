@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include "Enum.h"
 #include <vector>
+#include <chrono>
 
 
 namespace OS
@@ -16,12 +17,12 @@ namespace OS
                 protected:
                     Enum::TipoEvento eventType;
                     bool active;
-                    int startTime;
-                    int duration;
-                    int remainingDuration;
+                    long long startTime;
+                    long long duration;
+                    long long remainingDuration;
                     
                 public:
-                    Event(int strt, int dur, Enum::TipoEvento t)
+                    Event(long long strt, long long dur, Enum::TipoEvento t)
                     {
                         eventType = t;
                         active = false;
@@ -31,50 +32,61 @@ namespace OS
                     ~Event();
 
                     Enum::TipoEvento getOpType() {return eventType;};
-                    int getStart() {return startTime;};
-                    int getDuration() {return duration;};
-                    int getRemainingDuration() { return remainingDuration; };
+                    long long getStart() {return startTime;};
+                    long long getDuration() {return duration;};
+                    long long getRemainingDuration() { return remainingDuration; };
                     void decreaseDuration() { remainingDuration--; };
                     void start() {active = true;};
                     void end() {active = false;}; 
             };
             
             std::vector<Event*> eventList;
+            std::vector<Event*> finishedEvents;
+            bool eventRunning;
+            Event* curEvent;
+
             Enum::TaskState curState;
             const int startingPriority;
             int dynamicPriority;
-            const int totalDuration;
-            const int startTime;
-            int currentDuration;
-            int lifeTime;
-            int waitTime;
+            long long duration;
+            const long long startTime;
+            long long lifeTime;
+            long long waitTime;
             std::string id;
+            
 
+            
         public:
-            Task(int strt, int dur, int prio = 0, std::string i);
+            Task(long long strt, long long dur, int prio = 0, std::string i);
             ~Task();
 
-            int getStart() {return startTime;};
-            int getDuration() {return totalDuration;};
+            long long getStart() const {return startTime;};
+            long long getDuration() const {return duration;};
+            void lowerDuration() {duration--;}
 
-            int getLifeTime() {return lifeTime;};
-            int getWaitTime() {return waitTime;};
+            long long getLifeTime() {return lifeTime;};
+            long long getWaitTime() {return waitTime;};
 
             void setLifeTime(int lftm) { lifeTime = lftm; };
             void setWaitTime(int wttm) { waitTime = wttm; }; 
 
             void increaseWaitTime() { waitTime++;};
-            void increaseWaitTime() {lifeTime++;};
+            void increaseLifetTime() {lifeTime++;};
 
             void increasePriority() { dynamicPriority++; };
             void increasePriority(int prio) { dynamicPriority+=prio; };
 
             void changePriority(int prio) {dynamicPriority = prio; };
 
+            int getPriority() {return startingPriority; };
+            int getDynamicPriority() {return dynamicPriority; };
+
             void ChangeState(Enum::TaskState stt = Enum::TaskState::ReadyToExecute) { curState = stt;};
 
-            void createEvent(int strt, int dur, Enum::TipoEvento t);
+            void createEvent(long long strt, long long dur, Enum::TipoEvento t);
             void addEvent(Event* ev) { eventList.push_back(ev); };
+            void runEvent(std::chrono::milliseconds tick);
+
 
    }; 
 }

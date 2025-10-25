@@ -4,26 +4,50 @@
 
 namespace OS
 {
-    Scheduler* Scheduler::_instance = nullptr;
+    Scheduler* Scheduler::instance = nullptr;
 
 
     Scheduler::Scheduler()
     {
-        _taskBlock.clear();
+        taskBlock.clear();
+        newTasks.clear();
+        usingResource.clear();
+        pausedTasks.clear();
         getInstance();
     }
 
     Scheduler* Scheduler::getInstance()
     {
-        if(_instance == nullptr)
+        if(instance == nullptr)
         {
-            _instance = new Scheduler();
+            instance = new Scheduler();
         }
 
-        return _instance;
+        return instance;
     }
 
-    Scheduler::~Scheduler() {}
+     void Scheduler::checkNewTasks(std::chrono::milliseconds tick)
+     {
+        for(auto i = newTasks.begin(); i != newTasks.end(); i++)
+        {
+            if(std::chrono::milliseconds((*i)->getStart()) == tick)
+            {
+                addTaskToBlock(*i);
+            }
+        }
+     }
+
+     void Scheduler::checkNewTasksFakeTick(int tick)
+     {
+        for(auto i = newTasks.begin(); i != newTasks.end(); i++)
+        {
+            if((*i)->getStart() == tick)
+            {
+                addTaskToBlock(*i);
+            }
+        }
+     }
+
 
     Task* Scheduler::CreateTask(int strt, int dur, int prio, std::string id)
     {
@@ -33,5 +57,31 @@ namespace OS
         tarefa->setWaitTime(0);
         return tarefa; 
     }
+    void Scheduler::changeTask(Task* tsk)
+    {
+        curTask = tsk;
+    }
 
+
+    void Scheduler::Schedule(std::chrono::milliseconds tick)
+    {
+        if(curTask == nullptr && !taskBlock.empty())
+        {
+            curTask = taskBlock.front();
+            taskBlock.erase(taskBlock.begin());
+        }
+        else
+            return;
+    }
+
+    void Scheduler::ScheduleFakeTick(int tick)
+    {
+        if(curTask == nullptr && !taskBlock.empty())
+        {
+            curTask = taskBlock.front();
+            taskBlock.erase(taskBlock.begin());
+        }
+        else
+            return;
+    }
 }
