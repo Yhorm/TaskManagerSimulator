@@ -33,6 +33,7 @@ namespace OS
             if(std::chrono::milliseconds((*i)->getStart()) == tick)
             {
                 addTaskToBlock(*i);
+                (*i)->ChangeState(Enum::TaskState::ReadyToExecute);
             }
         }
      }
@@ -41,9 +42,10 @@ namespace OS
      {
         for(auto i = newTasks.begin(); i != newTasks.end(); i++)
         {
-            if((*i)->getStart() == tick)
+            if((*i)->getStart() == (long long)tick)
             {
                 addTaskToBlock(*i);
+                (*i)->ChangeState(Enum::TaskState::ReadyToExecute);
             }
         }
      }
@@ -67,6 +69,7 @@ namespace OS
     {
         if(curTask == nullptr && !taskBlock.empty())
         {
+            curTask->ChangeState(Enum::TaskState::Executing);
             curTask = taskBlock.front();
             taskBlock.erase(taskBlock.begin());
         }
@@ -78,6 +81,7 @@ namespace OS
     {
         if(curTask == nullptr && !taskBlock.empty())
         {
+            curTask->ChangeState(Enum::TaskState::Executing);
             curTask = taskBlock.front();
             taskBlock.erase(taskBlock.begin());
         }

@@ -42,8 +42,10 @@ namespace OS
         }
         else if(lowestDurationTask->getDuration() < curTask->getDuration())
         {
+            curTask->ChangeState(Enum::TaskState::PausedExecution);
             taskBlock.push_back(curTask);
             curTask = lowestDurationTask;
+            curTask->ChangeState(Enum::TaskState::Executing);
             taskBlock.erase(taskBlock.begin() + index);
         }
     }
@@ -65,8 +67,10 @@ namespace OS
         }
         else if(lowestDurationTask->getDuration() < curTask->getDuration())
         {
+            curTask->ChangeState(Enum::TaskState::PausedExecution);
             taskBlock.push_back(curTask);
             curTask = lowestDurationTask;
+            curTask->ChangeState(Enum::TaskState::Executing);
             taskBlock.erase(taskBlock.begin() + index);
         }
     }

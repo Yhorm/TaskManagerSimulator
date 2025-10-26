@@ -42,10 +42,11 @@ namespace OS
             
             std::vector<Event*> eventList;
             std::vector<Event*> finishedEvents;
+            Enum::TaskState curState;
+            
             bool eventRunning;
             Event* curEvent;
 
-            Enum::TaskState curState;
             const int startingPriority;
             int dynamicPriority;
             long long duration;
