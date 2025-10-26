@@ -1,8 +1,8 @@
 #pragma once
+
+
 #include <string>
-
-
-
+#include "imgui.h"
 
 namespace UserInterface
 {
@@ -10,6 +10,7 @@ namespace UserInterface
     {
         protected:
             static UIHandler* instance;
+            GLFWwindow* window;
 
             UIHandler();
         public:
@@ -22,5 +23,11 @@ namespace UserInterface
                 return instance;
             }
 
+            ~UIHandler();
+            
+            void InitializeLibraries();
+
+            void run();
+            void end();
     }; 
 }
