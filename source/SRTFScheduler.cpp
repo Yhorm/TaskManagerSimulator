@@ -3,6 +3,11 @@
 namespace OS
 {
     
+    SRTF::SRTF() :
+        Scheduler()
+    {}
+    SRTF::~SRTF() {}
+
     int SRTF::getBestTask()
     {
         
@@ -89,6 +94,10 @@ namespace OS
                 curTask = nullptr;
             }
         }
+        if(ScheduleFinished())
+        {
+            return;
+        }
     }
 
      void SRTF::runFakeTick(int tick)
@@ -104,6 +113,11 @@ namespace OS
                 addTaskToFinished(curTask);
                 curTask = nullptr;
             }
+        }
+
+        if(ScheduleFinished())
+        {
+            return;
         }
     }
 }

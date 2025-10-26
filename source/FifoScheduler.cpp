@@ -25,6 +25,11 @@ namespace OS
                 curTask = nullptr;
             }
         }
+
+        if(ScheduleFinished())
+        {
+            return;
+        }
     }
 
     void FIFO::runFakeTick(int tick)
@@ -40,6 +45,10 @@ namespace OS
                 addTaskToFinished(curTask);
                 curTask = nullptr;
             }
+        }
+        if(ScheduleFinished())
+        {
+            return;
         }
     }
 }

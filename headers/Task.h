@@ -58,7 +58,7 @@ namespace OS
 
             
         public:
-            Task(long long strt, long long dur, int prio = 0, std::string i);
+            Task(long long strt, long long dur, int prio, std::string i);
             ~Task();
 
             long long getStart() const {return startTime;};

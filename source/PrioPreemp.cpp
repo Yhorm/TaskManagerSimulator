@@ -95,5 +95,32 @@ namespace OS
                 curTask = nullptr;
             }
         }
+
+        if(ScheduleFinished())
+        {
+            return;
+        }
     }
+
+    void PRIOP::runFakeTick(int tick)
+    {
+        checkNewTasksFakeTick(tick);
+        ScheduleFakeTick(tick);
+
+        if(curTask != nullptr)
+        {
+            curTask->lowerDuration();
+            if(curTask->getDuration() == 0)
+            {
+                addTaskToFinished(curTask);
+                curTask = nullptr;
+            }
+        }
+
+        if(ScheduleFinished())
+        {
+            return;
+        }
+    }
+
 }

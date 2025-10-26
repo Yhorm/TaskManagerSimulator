@@ -8,10 +8,9 @@
 
 #include "Clock.h"
 #include "Scheduler.h"
-#include "FifoScheduler.h"
 #include "PrioPreemp.h"
+#include "FifoScheduler.h"
 #include "SRTFScheduler.h"
-
 
 namespace OS
 {
@@ -25,7 +24,7 @@ namespace OS
             int fakeTick; 
             int _quantum;
 
-
+            UserInterface::UIHandler* UI;
 
         public:
             System();

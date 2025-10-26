@@ -1,8 +1,11 @@
 #pragma once
 
-
+#include <iostream>
 #include <string>
 #include "imgui.h"
+
+struct GLFWwindow;
+
 
 namespace UserInterface
 {

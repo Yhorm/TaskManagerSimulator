@@ -4,8 +4,6 @@
 
 namespace OS
 {
-    Scheduler* Scheduler::instance = nullptr;
-
 
     Scheduler::Scheduler()
     {
@@ -13,18 +11,10 @@ namespace OS
         newTasks.clear();
         usingResource.clear();
         pausedTasks.clear();
-        getInstance();
     }
 
-    Scheduler* Scheduler::getInstance()
-    {
-        if(instance == nullptr)
-        {
-            instance = new Scheduler();
-        }
-
-        return instance;
-    }
+    Scheduler::~Scheduler()
+    {}
 
      void Scheduler::checkNewTasks(std::chrono::milliseconds tick)
      {
@@ -88,4 +78,5 @@ namespace OS
         else
             return;
     }
+
 }

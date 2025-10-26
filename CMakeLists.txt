@@ -54,8 +54,10 @@ target_include_directories(imgui PUBLIC
 
 find_package(OpenGL REQUIRED)
 
+
+file(GLOB SOURCES "source/*.cpp")
 add_executable(TMSIM
-    source/main.cpp
+    ${SOURCES}
 )
 
 target_include_directories(TMSIM PUBLIC 

@@ -7,9 +7,11 @@ namespace OS
         _tick(),
         _quantum(),
         _sched(nullptr),
+        UI(nullptr),
         fakeTick(0)
     {
         ParseFile();
+        UI->getInstance();
     }
 
     System::~System()
@@ -147,9 +149,14 @@ namespace OS
             dur = std::stoi(stringCfg);
 
             //pega a prioridade
-            std::getline(tokens, stringCfg, Constants::SEPARADOR_STRINGS);
-            priority = std::stoi(stringCfg);
+            if(std::getline(tokens, stringCfg, Constants::SEPARADOR_STRINGS))
+            {  
+                priority = std::stoi(stringCfg);
+            } else {
+                priority = 0;
+            }
             
+
             //Loop para pegar os eventos:
             std::string stringEvent;
             Task* tarefa = _sched->CreateTask(start, dur, priority, taskId);
@@ -222,5 +229,10 @@ namespace OS
             }
         }
         return newSched;
+    }
+
+    void System::tick()
+    {
+        UI->run();
     }
 }

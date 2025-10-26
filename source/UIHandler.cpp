@@ -1,6 +1,6 @@
 #include "../headers/UIHandler.h"
 
-#include <glad/glad.h>
+#include <../libraries/glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -39,7 +39,11 @@ namespace UserInterface
         void UIHandler::run()
         {
             InitializeLibraries();
-
+            if (!window) {
+            std::cerr << "Erro: Janela GLFW não foi criada!" << std::endl;
+            system("pause"); // Windows: mantém terminal aberto para ver a mensagem
+            return;
+        }
             ImGui::Begin("TMSIM");
 
             while (!glfwWindowShouldClose(window)) 
@@ -53,7 +57,6 @@ namespace UserInterface
                 ImGui::NewFrame();
 
 
-                // Ou mostrar janela demo para referência
                 ImGui::ShowDemoWindow();
 
                 // Renderização
@@ -72,6 +75,8 @@ namespace UserInterface
             }
 
             end();
+            std::cout << "Programa finalizado. Pressione Enter para sair." << std::endl;
+            std::cin.get(); // Faz o terminal esperar entrada do usuário
         }
 
         void UIHandler::end()

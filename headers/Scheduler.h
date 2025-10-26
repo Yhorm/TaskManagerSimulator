@@ -21,15 +21,12 @@ namespace OS
             std::vector<Task*>  usingResource;
             std::vector<Task*>  pausedTasks;
             std::vector<Task*>  finishedTasks;
-            static Scheduler*   instance;
-
             Task*               curTask;
 
+            public:
+            //Construtora
+            //Destrutora
             Scheduler();
-        public:
-        //Construtora
-        //Destrutora
-            Scheduler*      getInstance();
             virtual         ~Scheduler();
 
         //Criação de tarefas
@@ -42,9 +39,9 @@ namespace OS
         //Funções principais
             virtual void    Schedule(std::chrono::milliseconds tick);
             virtual void    ScheduleFakeTick(int tick);
-            bool            ScheduleFinished();
-            virtual void    run(std::chrono::milliseconds tick);
-            virtual void    runFakeTick(int tick);
+            bool            ScheduleFinished() { return taskBlock.empty(); };
+            virtual void    run(std::chrono::milliseconds tick) = 0;
+            virtual void    runFakeTick(int tick) = 0;
             void            checkNewTasks(std::chrono::milliseconds tick);
             void            checkNewTasksFakeTick(int tick);
             void            changeTask(Task* tsk);
