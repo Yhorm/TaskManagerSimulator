@@ -19,7 +19,7 @@ namespace OS
     {
         private:
             OS::Scheduler* _sched;
-            Clock _tick;
+            Clock* _clk;
             
             int fakeTick; 
             int _quantum;

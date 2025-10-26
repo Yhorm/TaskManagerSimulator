@@ -60,6 +60,9 @@ namespace OS
         public:
             Task(long long strt, long long dur, int prio, std::string i);
             ~Task();
+            
+
+            std::string getId() const {return id;};
 
             long long getStart() const {return startTime;};
             long long getDuration() const {return duration;};

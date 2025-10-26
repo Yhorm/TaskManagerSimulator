@@ -79,4 +79,14 @@ namespace OS
             return;
     }
 
+    void Scheduler::listTasks()
+    {
+        for(auto i = newTasks.begin(); i != newTasks.end(); i++)
+        {
+            std::cout << "ID: " << (*i)->getId() << " Começo: "
+            << (*i)->getStart() << " duração: " << (*i)->getDuration()
+            << " prioridade: " << (*i)->getPriority() << std::endl;
+        }
+    }
+
 }

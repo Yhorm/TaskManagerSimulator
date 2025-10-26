@@ -46,10 +46,14 @@ namespace OS
             void            checkNewTasksFakeTick(int tick);
             void            changeTask(Task* tsk);
         //Funções auxiliares
-           void             addTaskToBlock(Task* tsk) { taskBlock.push_back(tsk); };
-           void             addTaskToNew(Task* tsk) { newTasks.push_back(tsk);};
-           void             addTaskToResource(Task* tsk) { usingResource.push_back(tsk);};
-           void             addTaskToPaused(Task* tsk) { pausedTasks.push_back(tsk);};
-           void             addTaskToFinished(Task* tsk) { finishedTasks.push_back(tsk); };
+            void             addTaskToBlock(Task* tsk) { taskBlock.push_back(tsk); };
+            void             addTaskToNew(Task* tsk) { newTasks.push_back(tsk);};
+            void             addTaskToResource(Task* tsk) { usingResource.push_back(tsk);};
+            void             addTaskToPaused(Task* tsk) { pausedTasks.push_back(tsk);};
+            void             addTaskToFinished(Task* tsk) { finishedTasks.push_back(tsk); };
+            void             listTasks(); 
+
+            std::vector<Task*> getTaskBlock() const {return newTasks; };
+
     };
 }

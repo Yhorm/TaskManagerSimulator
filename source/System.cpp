@@ -4,14 +4,12 @@
 namespace OS
 {
     System::System() :
-        _tick(),
         _quantum(),
         _sched(nullptr),
-        UI(nullptr),
         fakeTick(0)
     {
-        ParseFile();
-        UI->getInstance();
+        this->_clk = OS::Clock::getInstance();
+        this->UI = UserInterface::UIHandler::getInstance();
     }
 
     System::~System()
@@ -75,20 +73,52 @@ namespace OS
         */
     }
 
+    Scheduler* System::createScheduler(Enum::TipoEscalonador sched)
+    {
+        Scheduler* newSched = nullptr;
+        PRIOP* priopSched = nullptr;
+        SRTF* SRTFsched = nullptr;
+        FIFO* FIFOsched = nullptr;
+
+        switch(sched)
+        {
+            case(Enum::TipoEscalonador::PRIOp):
+            {
+                priopSched = new PRIOP();
+                newSched = dynamic_cast<Scheduler*>(priopSched);
+            }
+            case(Enum::TipoEscalonador::SRTF):
+            {
+                SRTFsched = new SRTF();
+                newSched = dynamic_cast<Scheduler*>(SRTFsched);
+            }
+            case(Enum::TipoEscalonador::FIFO):
+            {
+                FIFOsched = new FIFO();
+                newSched = dynamic_cast<Scheduler*>(FIFOsched);
+            }
+            default:
+            {
+                FIFOsched = new FIFO();
+                newSched = dynamic_cast<Scheduler*>(FIFOsched);
+            }
+        }
+        return newSched;
+    }
+
     void System::ParseFile()
     {
         std::ifstream arquivoCfg(Constants::FILE_PATH_CFG);
         if(arquivoCfg.is_open() == false)
         {
             std::cerr << "Erro ao abrir configuração do usuário, abrindo configuração default. \n";
-            
         }
         //Começa a ler as strings
         std::string stringCfg;
         if(!std::getline(arquivoCfg, stringCfg))
         {
-            std::cerr << "Erro getline, fechando aplicação \n";
-            exit(1);
+            std::cerr << "Erro getline \n";
+            return;
         }
 
         //utiliza-se do stringstream pra tokenizar.
@@ -112,11 +142,11 @@ namespace OS
         //Timer
         if(std::getline(tokens, stringCfg, Constants::SEPARADOR_STRINGS))
         {
-            _tick.setTickRate(std::stoll(stringCfg));
+            _clk->setTickRate(std::stoll(stringCfg));
         }
         else
         {
-            _tick.setTickRate(Constants::DEFAULT_TICK_RATE);
+            _clk->setTickRate(Constants::DEFAULT_TICK_RATE);
         }
 
         //Nova linha
@@ -198,41 +228,14 @@ namespace OS
         arquivoCfg.close();
     }
 
-    Scheduler* System::createScheduler(Enum::TipoEscalonador sched)
-    {
-        Scheduler* newSched = nullptr;
-        PRIOP* priopSched = nullptr;
-        SRTF* SRTFsched = nullptr;
-        FIFO* FIFOsched = nullptr;
-
-        switch(sched)
-        {
-            case(Enum::TipoEscalonador::PRIOp):
-            {
-                priopSched = new PRIOP();
-                newSched = dynamic_cast<Scheduler*>(priopSched);
-            }
-            case(Enum::TipoEscalonador::SRTF):
-            {
-                SRTFsched = new SRTF();
-                newSched = dynamic_cast<Scheduler*>(SRTFsched);
-            }
-            case(Enum::TipoEscalonador::FIFO):
-            {
-                FIFOsched = new FIFO();
-                newSched = dynamic_cast<Scheduler*>(FIFOsched);
-            }
-            default:
-            {
-                FIFOsched = new FIFO();
-                newSched = dynamic_cast<Scheduler*>(FIFOsched);
-            }
-        }
-        return newSched;
-    }
+    void System::ChangeUserConfig() {}
+    void System::WriteUserConfig() {}
+    void System::GenerateUserConfig() {}
 
     void System::tick()
-    {
+    {   
+        ParseFile();
+        this->UI->setSched(_sched);
         UI->run();
     }
 }

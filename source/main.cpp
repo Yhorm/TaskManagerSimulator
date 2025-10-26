@@ -4,9 +4,9 @@
 
 int main()
 {
-    OS::System* Sistema = new OS::System();
+    OS::System Sistema;
 
-    Sistema->tick();
+    Sistema.tick();
 
     return 0;
 }

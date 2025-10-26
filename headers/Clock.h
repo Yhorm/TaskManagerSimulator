@@ -11,9 +11,12 @@ namespace OS
 
             std::chrono::steady_clock::time_point startTime;
 
-        public:
+            static Clock* instance;
             Clock();
+        public:
             ~Clock();
+
+            static Clock* getInstance();
 
             void resetTimer()
             {
